@@ -48,7 +48,17 @@ var getAddr = function(req, res){
 
   var addrFind = Transaction.find( { $or: [{"to": addr}, {"from": addr}] })  
 
-  addrFind.lean(true).sort('-blockNumber').skip(start).limit(limit)
+  var sortOrder = '-blockNumber';
+  if (req.body.order && req.body.order[0] && req.body.order[0].column) {
+    // date or blockNumber column
+    if (req.body.order[0].column == 1 || req.body.order[0].column == 6) {
+      if (req.body.order[0].dir == 'asc') {
+        sortOrder = 'blockNumber';
+      }
+    }
+  }
+
+  addrFind.lean(true).sort(sortOrder).skip(start).limit(limit)
           .exec("find", function (err, docs) {
             if (docs)
               data.data = filters.filterTX(docs, addr);      
