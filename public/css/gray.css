@@ -1,0 +1,97 @@
+.page-prefooter {
+    background: #5a5a5a;
+    color: #b4b9b7;
+}
+
+.page-prefooter a {
+    color: #fff;
+}
+
+.page-footer {
+    background: #7d7d7d;
+    color: #eee;
+}
+
+.social-icons li>a {
+    border-radius: 14px!important;
+}
+
+.dashboard-stat2 {
+    padding: 0px;
+}
+
+.dashboard-stat2 .display .icon {
+    float: left;
+    padding: 1rem 10px;
+}
+
+.dashboard-stat2 .display .icon>i {
+    font-size: 38px;
+    color: #98a6c1;
+}
+
+.dashboard-stat2 .display .number h3 {
+    color: #585858;
+    font-size: 3.2rem;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.page-header .page-header-top .page-logo {
+    width: 450px;
+    height: 75px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #48525e;
+    text-shadow: 1px 1px 3px #cccccc;
+}
+
+.page-header .page-header-menu, .page-header .page-header-top {
+    /* background: #33f3ca; /* */
+    /* background: -moz-linear-gradient(left, #33f3ca 0%, #75baff 50%, #b591ff 100%); /* */
+    /* background: -webkit-linear-gradient(left, #33f3ca 0%,#75baff 50%,#b591ff 100%); /* */
+    /* background: linear-gradient(to right, #33f3ca 0%,#75baff 50%,#b591ff 100%); /* */
+    /* filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33f3ca', endColorstr='#b591ff',GradientType=1); /* */
+    background-color: #353535;
+}
+
+.page-header .page-header-menu .hor-menu .navbar-nav>li>a {
+    padding-bottom: 14px;
+    color: #fff !important;
+}
+
+.page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav>li:hover>a {
+    color: #fff!important;
+    background: transparent!important;
+}
+
+.page-header .page-header-menu .hor-menu .navbar-nav>li.active>a,
+.page-header .page-header-menu .hor-menu .navbar-nav>li.active>a:hover,
+.page-header .page-header-menu .hor-menu .navbar-nav>li.current>a,
+.page-header .page-header-menu .hor-menu .navbar-nav>li.current>a:hover {
+    border-bottom: 4px solid #8f9090!important;
+}
+
+.page-header .page-header-menu .hor-menu .navbar-nav>li.current>a,
+.page-header .page-header-menu .hor-menu .navbar-nav>li>a:hover {
+    border-bottom: none !important; /* */
+}
+
+.page-header .page-header-menu .hor-menu .navbar-nav>li>a {
+    font-size: 1.6rem;
+}
+
+.nav a.btn {
+    color: white;
+}
+
+.page-header .page-header-menu .hor-menu.hor-menu-light .navbar-nav>li .dropdown-menu li:hover>a {
+    color: #000;
+    background: #eaeaf2;
+}
+
+a.hash, a.account {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
