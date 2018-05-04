@@ -44,7 +44,7 @@ var getAddr = function(req, res){
   var limit = parseInt(req.body.length);
   var start = parseInt(req.body.start);
 
-  var data = { draw: parseInt(req.body.draw), recordsFiltered: count, recordsTotal: count };
+  var data = { draw: parseInt(req.body.draw), recordsFiltered: count, recordsTotal: count, mined: 0 };
 
   var addrFind = Transaction.find( { $or: [{"to": addr}, {"from": addr}] })  
 
@@ -58,6 +58,25 @@ var getAddr = function(req, res){
     }
   }
 
+  Transaction.aggregate([
+    {$match: { $or: [{"to": addr}, {"from": addr}] }},
+    {$group: { _id: null, count: { $sum: 1 } }}
+  ]).exec(function(err, results) {
+    if (!err && results && results.length > 0) {
+      // fix recordsTotal
+      data.recordsTotal = results[0].count;
+      data.recordsFiltered = results[0].count;
+    }
+  });
+
+  Block.aggregate([
+    { $match: { "miner": addr } },
+    { $group: { _id: '$miner', count: { $sum: 1 } }
+  }]).exec(function(err, results) {
+    if (!err && results && results.length > 0) {
+      data.mined = results[0].count;
+      console.log(results);
+    }
   addrFind.lean(true).sort(sortOrder).skip(start).limit(limit)
           .exec("find", function (err, docs) {
             if (docs)
@@ -67,6 +86,7 @@ var getAddr = function(req, res){
             res.write(JSON.stringify(data));
             res.end();
           });
+  });
 
 };
 var getBlock = function(req, res) {
