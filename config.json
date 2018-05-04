@@ -1,0 +1,25 @@
+{
+    "nodeAddr":     "localhost",
+    "gethPort":     9547,
+    "startBlock":   0,
+    "endBlock":     "latest",
+    "quiet":        true,
+    "syncAll":      false,
+    "patch":        false,
+    "patchBlocks":  100,
+    "settings": {
+        "symbol": "ETC",
+        "name": "Ethereum Classic",
+        "title": "Ethereum Classic Block Explorer",
+        "author": "Elaine",
+        "miners": {
+           "0xe3ec5ebd3e822c972d802a0ee4e0ec080b8237ba": "SejunPool",
+           "0xc734480388db099cb43fd1c3ed530b39b9d8d567": "GonsPool",
+           "0x2eb64b8ab13f0d7823158217d15ba310ed3d0e58": "TopMining",
+           "0x0b292a321fe5e20cc943648a782184f8ab44d2eb": "MoricPool",
+           "0x2930822031420731f09dce572554a8b8c1eaa09b": "Gonsmine",
+           "0xfc35930abb108ae6cae33fd065dfb799808ea326": "Comining",
+           "0x90d7c82615f151953a8d71a68096cee4d428619c": "privatePool"
+        }
+    }
+}

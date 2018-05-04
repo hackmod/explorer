@@ -4,7 +4,7 @@ var BlocksApp = angular.module("BlocksApp", [
     "oc.lazyLoad",  
     "ngSanitize"
 ]); 
-
+BlocksApp.constant('_', window._); // loadsh
 BlocksApp.config(['$ocLazyLoadProvider',  '$locationProvider', 
     function($ocLazyLoadProvider, $locationProvider) {
     $ocLazyLoadProvider.config({
@@ -14,8 +14,6 @@ BlocksApp.config(['$ocLazyLoadProvider',  '$locationProvider',
       enabled: true
     });
 }]);
-
-
 /* Setup global settings */
 BlocksApp.factory('settings', ['$rootScope', '$http', function($rootScope, $http) {
     // supported languages
@@ -35,6 +33,13 @@ BlocksApp.factory('settings', ['$rootScope', '$http', function($rootScope, $http
     return settings;
 }]);
 
+/* Load config settings */
+BlocksApp.factory('setupObj', ['$rootScope', '$http', function($rootScope, $http) {
+    return $http.get('/config').then(function(res) {
+        return res.data;
+    })
+}]);
+
 /* Setup App Main Controller */
 BlocksApp.controller('MainController', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.$on('$viewContentLoaded', function() {
@@ -47,13 +52,11 @@ BlocksApp.controller('MainController', ['$scope', '$rootScope', function($scope,
 Layout Partials.
 By default the partials are loaded through AngularJS ng-include directive.
 ***/
-
 /* Setup Layout Part - Header */
 BlocksApp.controller('HeaderController', ['$scope', '$location', function($scope, $location) {
     $scope.$on('$includeContentLoaded', function() {
         Layout.initHeader(); // init header
     });
-
     $scope.form = {};
     $scope.searchQuery = function(s) {
         var search = s.toLowerCase();
@@ -69,31 +72,25 @@ BlocksApp.controller('HeaderController', ['$scope', '$location', function($scope
             $location.path("/block/" + search);
         else 
             $scope.form.searchInput = search;
-
     }
 }]);
-
 /* Search Bar */
 BlocksApp.controller('PageHeadController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {        
         
     });
 }]);
-
 /* Setup Layout Part - Footer */
 BlocksApp.controller('FooterController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Layout.initFooter(); // init footer
     });
 }]);
-
 /* Setup Rounting For All Pages */
 BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     // Redirect any unmatched url
-    $urlRouterProvider.otherwise("home");  
-    
+    $urlRouterProvider.otherwise("home");      
     $stateProvider
-
         // Dashboard
         .state('home', {
             url: "/home",
@@ -112,7 +109,6 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                 }]
             }
         })
-
         .state('address', {
             url: "/addr/{hash}",
             templateUrl: "views/address.html",
@@ -134,7 +130,6 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                 }]
             }
         })
-
         .state('block', {
             url: "/block/{number}",
             templateUrl: "views/block.html",
@@ -147,6 +142,24 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
                              '/js/controllers/BlockController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+
+        .state('uncle', {
+            url: "/uncle/*number",
+            templateUrl: "views/block.html",
+            data: {pageTitle: 'Uncle'},
+            controller: "UncleController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'BlocksApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+                             '/js/controllers/UncleController.js'
                         ]
                     });
                 }]
@@ -170,7 +183,6 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                 }]
             }
         })
-
         .state('contract', {
             url: "/contract/{addr}",
             templateUrl: "views/contract.html",
@@ -192,26 +204,10 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
         .state('stats', {
             url: "/stats/{chart}",
             templateUrl: "views/stats/index.html",
-            data: {pageTitle: 'Transaction'},
+            data: {pageTitle: 'Statistics'},
             controller: "StatsController",
             resolve: {
                 deps: ['$ocLazyLoad', '$stateParams', function($ocLazyLoad, $stateParams) {
-                    var bundle = '/js/stats/bundle_';
-
-                    switch ($stateParams.chart) {
-                        case "etc_hashrate":
-                            bundle = bundle + "hashrate.js";
-                            break;
-                        case "miner_hashrate":
-                            bundle = bundle + "hashrate_distribution.js";
-                            break;
-
-                        case "The_bomb_chart":
-                            bundle = bundle + "The_bomb_chart_with_ECIP_1010.js";
-                            break;
-
-                    }
-
                     return $ocLazyLoad.load({
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
@@ -219,7 +215,7 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                              '/css/stats.css',
                              "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.10/d3.js",
                              "/plugins/async.min.js",
-                             bundle
+                             "/plugins/moment/moment.min.js"
                         ]
                     });
                 }]
@@ -242,7 +238,6 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                 }]
             }
         })
-
         .state('token', {
             url: "/token/{hash}",
             templateUrl: "views/token.html",
@@ -260,7 +255,6 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                 }]
             }
         })
-
         .state('dao', {
             url: "/dao",
             templateUrl: "views/dao.html",
@@ -278,7 +272,6 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
                 }]
             }
         })
-
         .state('err404', {
             url: "/err404/{thing}/{hash}",
             templateUrl: "views/err_404.html",
@@ -297,7 +290,6 @@ BlocksApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvide
             }
         })
 }]);
-
 BlocksApp.filter('timeDuration', function() {
   return function(timestamp) {
     return getDuration(timestamp).toString();
@@ -314,9 +306,11 @@ BlocksApp.filter('timeDuration', function() {
         return parseInt(result);
   }
 })
-
 /* Init global settings and run the app */
-BlocksApp.run(["$rootScope", "settings", "$state", function($rootScope, settings, $state) {
+BlocksApp.run(["$rootScope", "settings", "$state", "setupObj", function($rootScope, settings, $state, setupObj) {
     $rootScope.$state = $state; // state to be accessed from view
     $rootScope.$settings = settings; // state to be accessed from view
+    setupObj.then(function(res) {
+        $rootScope.setup = res;
+    });
 }]);
