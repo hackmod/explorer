@@ -27,6 +27,42 @@ const TokenTransfer = mongoose.model('TokenTransfer');
 
 const ERC20_METHOD_DIC = { '0xa9059cbb': 'transfer', '0xa978501e': 'transferFrom' };
 
+function normalizeTX(txData, blockData) {
+  var tx = {
+    blockHash: txData.blockHash,
+    blockNumber: txData.blockNumber,
+    from: txData.from,
+    to: txData.to,
+    hash: txData.hash,
+    value: etherUnits.toEther(new BigNumber(txData.value), 'wei'),
+    nonce: txData.nonce,
+    r: txData.r,
+    s: txData.s,
+    v: txData.v,
+    gas: txData.gas,
+    gasPrice: txData.gasPrice,
+    input: txData.input,
+    transactionIndex: txData.transactionIndex,
+    timestamp: blockData.timestamp
+  };
+  if (txData.to == null) {
+    // parity support `creates` field
+    if (txData.creates) {
+      tx.creates = txData.creates;
+      return tx;
+    } else {
+      // getTransactionReceipt to get contract address
+      var receipt = web3.eth.getTransactionReceipt(tx.hash);
+      if (receipt && receipt.contractAddress) {
+        tx.creates = receipt.contractAddress;
+      }
+      return tx;
+    }
+  } else {
+    return tx;
+  }
+}
+
 /**
   Start config for node connection and sync
 **/

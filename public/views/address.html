@@ -19,8 +19,27 @@
             <div ng-hide="addr.mined==0" class="margin-top-20">
               {{ addr.mined }} <span class="eth-stat-text">Mined</span>
             </div>
-            <div class="margin-top-20">
-              {{ addr.count }} <span class="eth-stat-text">Transactions</span>
+            <div class="col-md-6 center">
+                <div class="portlet">
+                  <div class="portlet-body">
+
+                    <span class='btn blue-madison' ng-show="!isFollowing(addrHash)" ng-click="follow(addrHash)">WATCH <i class="fa fa-rss "></i></span>
+                    <span class='btn grey'  ng-show="isFollowing(addrHash)" ng-click="unFollow(addrHash)">WATCHING <i class="fa fa-check "></i></span>
+                    <div class="margin-top-20">
+                        {{ addr.follow_count }}0 
+                        <span class="eth-stat-text">WATCHING</span>
+                    </div>
+                    <div class="margin-top-20" ng-show="addr.isContract">
+                       <span class="eth-stat-text">Contract Creator</span><br>
+                       <a href="/addr/{{addr.creator}}">{{addr.creator.substr(0,24)}}...</a> at txn
+                       <a href="/tx/{{addr.transaction}}">{{addr.transaction.substr(0,24)}}...</a>
+                    </div>
+                    <div class="margin-top-20" ng-show="addr.isTokenContract">
+                       <span class="eth-stat-text">Token Address</span><br>
+                       <a href="/token/{{addrHash}}">{{addrHash}}</a>
+                    </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -94,7 +113,7 @@
                   <td style="text-align:right"><a href="/block/{{t.blockNumber}}">{{t.blockNumber}}</a>
                   <td class="truncate-addrhash"> <a href="/addr/{{t.from}}">{{t.from}}</a> </td>
                   <td class="truncate-addrhash"> <a href="/addr/{{t.to}}">{{t.to}}</a> </td>
-                  <td style="text-align:right"> {{t.value}} </td>
+                  <td style="text-align:right"> {{t.amount | number: 4}} {{t.tokenInfo.symbol}}</td>
                   <td style="text-align:right"> {{t.gas}} </td>
                   <td style="text-align:center"><span class="label label-sm label-info {{t.type}}"> {{t.type}}</span><span class="label label-sm label-danger" ng-show="t.error"> {{t.error}}</span></td>
                 </tr>
