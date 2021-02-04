@@ -39,3 +39,4 @@ var isTransaction = function (tx) {
         return false;
     }
 };
+

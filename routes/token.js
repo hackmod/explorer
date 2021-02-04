@@ -4,6 +4,35 @@
     Endpoint for client interface with ERC-20 tokens
 */
 
+<<<<<<< HEAD
+const { eth } = require('./web3relay');
+
+const BigNumber = require('bignumber.js');
+
+const etherUnits = require(`${__lib}etherUnits.js`);
+
+const ABI = [{
+  'constant': true, 'inputs': [], 'name': 'name', 'outputs': [{ 'name': '', 'type': 'string' }], 'payable': false, 'type': 'function',
+}, {
+  'constant': true, 'inputs': [], 'name': 'totalSupply', 'outputs': [{ 'name': '', 'type': 'uint256' }], 'payable': false, 'type': 'function',
+}, {
+  'constant': true, 'inputs': [], 'name': 'decimals', 'outputs': [{ 'name': '', 'type': 'uint8' }], 'payable': false, 'type': 'function',
+}, {
+  'constant': true, 'inputs': [{ 'name': '', 'type': 'address' }], 'name': 'balanceOf', 'outputs': [{ 'name': '', 'type': 'uint256' }], 'payable': false, 'type': 'function',
+}, {
+  'constant': true, 'inputs': [], 'name': 'symbol', 'outputs': [{ 'name': '', 'type': 'string' }], 'payable': false, 'type': 'function',
+}];
+
+module.exports = async (req, res) => {
+  console.log(req.body);
+
+  const contractAddress = req.body.address;
+
+  const Token = new eth.Contract(ABI, contractAddress);
+
+  if (!('action' in req.body)) res.status(400).send();
+  else if (req.body.action == 'info') {
+=======
 require( '../db.js' );
 
 var mongoose = require( 'mongoose' );
@@ -92,9 +121,25 @@ module.exports = function(req, res){
     } catch (e) {
       decimals = 0;
     }
+>>>>>>> 0b8c4c3885e581183f3777ca1993136c3386be4e
     try {
-      var actualBalance = eth.getBalance(contractAddress);
+      let actualBalance = await eth.getBalance(contractAddress);
       actualBalance = etherUnits.toEther(actualBalance, 'wei');
+<<<<<<< HEAD
+      const totalSupply = await Token.methods.totalSupply().call();
+      const name = await Token.methods.name().call();
+      const symbol = await Token.methods.symbol().call();
+      const count = await eth.getTransactionCount(contractAddress);
+
+      const tokenData = {
+        'balance': actualBalance,
+        'total_supply': totalSupply,
+        'count': count,
+        'name': name,
+        'symbol': symbol,
+        'bytecode': await eth.getCode(contractAddress),
+      };
+=======
       var totalSupply = token.totalSupply();
       var name = token.name();
       var symbol = token.symbol();
@@ -117,11 +162,19 @@ module.exports = function(req, res){
         "decimals": decimals,
         "bytecode": eth.getCode(contractAddress)
       }
+>>>>>>> 0b8c4c3885e581183f3777ca1993136c3386be4e
       res.write(JSON.stringify(tokenData));
       res.end();
     } catch (e) {
       console.error(e);
     }
+<<<<<<< HEAD
+  } else if (req.body.action == 'balanceOf') {
+    const addr = req.body.user.toLowerCase();
+    try {
+      const tokens = await Token.methods.balanceOf(addr).call();
+      res.write(JSON.stringify({ 'tokens': tokens }));
+=======
   } else if (req.body.action=="balanceOf") {
     var addr = req.body.user.toLowerCase();
     var decimals = 0;
@@ -136,6 +189,7 @@ module.exports = function(req, res){
       var divisor = new BigNumber(10).pow(decimalsBN);
       tokens = tokens.dividedBy(divisor);
       res.write(JSON.stringify({"tokens": tokens}));
+>>>>>>> 0b8c4c3885e581183f3777ca1993136c3386be4e
       res.end();
     } catch (e) {
       var tokens = token.balanceOf(addr);
@@ -164,6 +218,11 @@ module.exports = function(req, res){
     } catch (e) {
       decimals = 0;
     }
+<<<<<<< HEAD
+  }
+
+};
+=======
     var decimalsBN = new BigNumber(decimals);
     var divisor = new BigNumber(10).pow(decimalsBN);
 
@@ -326,3 +385,4 @@ module.exports = function(req, res){
 };  
 
 const MAX_ENTRIES = 20;
+>>>>>>> 0b8c4c3885e581183f3777ca1993136c3386be4e
